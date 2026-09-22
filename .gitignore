@@ -1,0 +1,7 @@
+# west build output
+build/
+build-*/
+
+# twister output
+twister-out/
+twister-out.*/
