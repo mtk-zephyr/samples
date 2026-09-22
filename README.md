@@ -69,8 +69,15 @@ connectors, jumpers and the audio wiring.
 | [`uart/rx_interrupt`](uart/rx_interrupt) | Interrupt-driven RX under load, byte-for-byte, with ISR counts | host script |
 | [`uart/reconfigure`](uart/reconfigure) | `uart_configure()` changes the rate **on the wire** | host script |
 | [`gpio/loopback`](gpio/loopback) | GPIO output, input, toggle, and all four EINT trigger modes | a wire |
+| [`audio/`](audio) | The Audio Front End: playback, capture, and full-duplex eTDM loopbacks that check every captured frame | wires, a cell, and Linux's help |
 
 Each has its own README with the exact expected output.
+
+**Audio has prerequisites the others do not** — a build snippet, a hypervisor
+cell that grants the AFE, and two things Linux has to do first. Every one of
+them fails silently, with the driver returning success throughout, so work
+through [`audio/README.md`](audio/README.md) before concluding anything about
+the driver.
 
 **Three of them need a host-side script**, because the property being tested
 cannot be observed from the target. Timer accuracy measured with the timer under

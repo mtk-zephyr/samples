@@ -1,0 +1,14 @@
+sample:
+  name: MT8188 AFE playback_dl8
+common:
+  build_only: true
+  extra_args:
+    - SNIPPET=mtk-afe
+  platform_allow:
+    - mt8390_genio_700_evk/mt8188/a55
+    - mt8370_genio_510_evk/mt8188/a55
+tests:
+  sample.mediatek.audio.playback_dl8:
+    tags:
+      - audio
+      - mediatek
