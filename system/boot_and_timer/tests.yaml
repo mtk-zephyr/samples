@@ -1,0 +1,11 @@
+sample:
+  name: Boot, board identity and timer accuracy
+common:
+  build_only: true
+  platform_allow:
+    - mt8390_genio_700_evk/mt8188/a55
+    - mt8370_genio_510_evk/mt8188/a55
+tests:
+  sample.mediatek.system.boot_and_timer:
+    tags:
+      - mediatek
