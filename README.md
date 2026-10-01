@@ -93,6 +93,14 @@ west twister --build-only -T samples -p mt8390_genio_700_evk/mt8188/a55
 
 Useful after moving the tree to a new revision.
 
+On a workspace tracking **`mtk-v4.4.2`** this reports `No testsuites found at the
+specified location`, which looks like a wrong path and is not: these samples are
+described by `tests.yaml`, a name twister only learned in April 2026, and that
+branch's twister still looks for `sample.yaml`. Build each sample with
+`west build` there instead. The file name stays as it is — upstream has
+converted all of its own definitions to `tests.yaml` and calls the older names
+deprecated.
+
 ## What is not here
 
 **The in-tree test suites.** `tests/drivers/uart/uart_basic_api`,
