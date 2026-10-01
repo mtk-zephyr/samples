@@ -53,6 +53,13 @@ button gives neither. The test asserts four rising and four falling separately.
 
 ## Why only two pins
 
-Every other pin in bank 1 is listed in the board's `gpio-reserved-ranges` and
-stays with Linux, so the driver refuses it. `B6-reserved-pin` checks that
+Every other pin in bank 1 is listed in `gpio-reserved-ranges` in **this
+sample's overlay**, so the driver refuses it. `B6-reserved-pin` checks that
 refusal rather than taking it on trust.
+
+The overlay is doing three things, because the board devicetree leaves every
+GPIO bank disabled: it enables bank 1, selects the GPIO function for pins 38
+and 40 — every other function of those two is a JTAG signal — and declares the
+reserved ranges. GPIO 38 and 40 are what the inmate cell grants, which is a
+property of how the image is run rather than of the board, so the application
+that uses them is where that is written down.

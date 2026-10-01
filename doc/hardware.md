@@ -55,9 +55,15 @@ Console settings: **115200 8N1**, no flow control.
 ## GPIO wiring
 
 The inmate is granted exactly two pins of GPIO bank 1: **GPIO 38** (bank pin 6)
-and **GPIO 40** (bank pin 8). Every other pin in the bank is listed in the
-board's `gpio-reserved-ranges`, so the driver refuses it — `gpio/loopback`
-checks that refusal.
+and **GPIO 40** (bank pin 8).
+
+The board devicetree leaves every GPIO bank **disabled**, because which pins an
+inmate gets is a property of the cell it runs under rather than of the board. An
+application that wants them says so itself, in a devicetree overlay that enables
+bank 1, selects the GPIO function for the two pins, and reserves the rest of the
+bank so the driver refuses them. Copy
+[`gpio/loopback/boards/`](../gpio/loopback/boards) — `gpio/loopback` checks that
+refusal, so the overlay is proven rather than assumed.
 
 Both come out on the 40-pin Raspberry Pi HAT header:
 

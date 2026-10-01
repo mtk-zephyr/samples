@@ -1,0 +1,39 @@
+/*
+ * Copyright (c) 2026 MediaTek Inc.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*
+ * GPIO 38 and GPIO 40 are what the stock Zephyr inmate cell grants, not a
+ * property of the board, so the application that uses them declares them --
+ * the board devicetree leaves every GPIO bank disabled.
+ *
+ * Every line below is load-bearing:
+ *
+ *   status        the bank is off otherwise.
+ *   pinmux        every non-GPIO function of these two pins is a JTAG signal,
+ *                 and the shipped image leaves them as JTAG.  The GPIO driver
+ *                 applies the bank's "default" state at init.
+ *   reserved      check B6 asserts that a pin the cell does not grant is
+ *                 refused.  Without these ranges configure(pin0) returns 0, B6
+ *                 fails, and the sample goes on to drive GPIO 32.
+ */
+
+#include <zephyr/dt-bindings/pinctrl/mt8188-pinctrl.h>
+
+&pinctrl {
+	gpio32_63_default: gpio32_63_default {
+		group1 {
+			pinmux = <PINMUX_PIN_38__FUNC_B_GPIO38>,
+				 <PINMUX_PIN_40__FUNC_B_GPIO40>;
+		};
+	};
+};
+
+&gpio32_63 {
+	pinctrl-0 = <&gpio32_63_default>;
+	pinctrl-names = "default";
+	gpio-reserved-ranges = <0 6>, <7 1>, <9 23>;
+	status = "okay";
+};

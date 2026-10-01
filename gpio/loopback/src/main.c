@@ -11,8 +11,10 @@
  * drives, pin 8 observes, so every edge is produced by software: no bounce, and
  * the event count is exact. A physical button cannot give either.
  *
- * The board devicetree reserves every pin in the bank except 6 and 8, so the
- * two are also the only ones a write may reach.
+ * The board leaves every GPIO bank disabled, so this sample's own overlay in
+ * boards/ enables bank 1, selects the GPIO function for the two pins, and
+ * reserves every other pin in the bank -- which makes those two the only ones a
+ * write may reach.
  */
 
 #include <stdarg.h>
