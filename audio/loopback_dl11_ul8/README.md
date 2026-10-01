@@ -39,5 +39,4 @@ running — data handled every 5 ms from the timer interrupt
 hold a constant value. The first mismatch stops both streams and prints the
 frame, the slot, and what was expected against what arrived.
 
-It runs until you destroy the cell — it never stops a stream, so it does not
-leave the AFE in the state that wedges the next run.
+It runs until you destroy the cell — it never stops a stream.

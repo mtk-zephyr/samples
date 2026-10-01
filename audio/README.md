@@ -101,25 +101,8 @@ from one that merely runs.
 no way to drive their input from the board itself, so on a bare EVK they record
 silence — which is a correct result, not a failure.
 
-## A defect to budget for
-
-**The AFE cannot re-initialise after a full teardown.** An inmate that runs
-after one which stopped all its streams hangs during AFE init, and destroying
-that wedged cell takes the root cell down with it. Only a board reboot clears
-it.
-
-The loopbacks never hit this, because they run until the cell is destroyed
-under them and so never stop a stream. `twostream_dl11_dl8` and `api_reject` do
-stop: **reboot the board before running anything after them.** The distinguishing
-symptom is a console that stops after the sample's own header, before any
-driver call returns.
-
-`api_reject` is safe to run straight afterwards, because it never starts a
-stream.
-
 ## Which tree
 
-These need the AFE driver, which at the time of writing lives on the
-`mtk-genio-dev-afe` branch of the Genio tree rather than `mtk-genio-dev`. Until
-that work merges down, point `revision:` in the workspace `west.yml` at
-`mtk-genio-dev-afe` to build them.
+Nothing to do: the AFE driver is on `mtk-genio-dev`, which the workspace
+`west.yml` already tracks, and on `mtk-v4.4.2` as well if you are building from
+the stable branch.

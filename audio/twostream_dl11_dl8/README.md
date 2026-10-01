@@ -50,10 +50,3 @@ Phase 3 separates a count that never rises from one that never falls: a count
 stuck at zero brings the domain up once and never again. Phase 4 repeats the
 test in the other order, because a reference count can be wrong in one
 direction only.
-
-## Reboot afterwards
-
-This sample stops every stream it started, which leaves the AFE in the state
-that wedges the **next** inmate during init. Reboot the board before running
-another audio sample. `api_reject` is the exception — it never starts a stream,
-so it is safe to run straight after.
