@@ -27,9 +27,9 @@ adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin'
   board target      mt8370_genio_510_evk/mt8188/a55
   cntfrq            13000000 Hz
   sleeps            3 started, 3 completed
-    iteration 0          +5.8 ms from 5 s
-    iteration 1          +5.6 ms from 5 s
-    iteration 2          +5.1 ms from 5 s
+    iteration 0          -8.7 ms from 5 s
+    iteration 1          +6.9 ms from 5 s
+    iteration 2          +7.2 ms from 5 s
 
 RESULT: PASS
 ```

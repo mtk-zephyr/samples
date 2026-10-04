@@ -25,11 +25,14 @@ RE_END = re.compile(r'SLEEP_END\s+(\d+)')
 
 def capture(port, baud, timeout):
     """Read lines until BOOT DONE, returning (arrival_time, text) pairs."""
-    ser = serial.Serial(port, baud, timeout=0.5)
+    ser = serial.Serial(port, baud, timeout=0.05)
     lines, buf = [], b''
     end = time.time() + timeout
     while time.time() < end:
-        chunk = ser.read(4096)
+        # Read what has arrived, or block for one byte: read(n) waits for all
+        # n bytes or the timeout, which would stamp a line at the end of the
+        # wait rather than on arrival.
+        chunk = ser.read(ser.in_waiting or 1)
         if not chunk:
             continue
         now = time.time()
