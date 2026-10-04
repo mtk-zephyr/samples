@@ -19,7 +19,7 @@ frames, which needs the port clocked, not connected to anything.
 west build -b mt8370_genio_510_evk/mt8188/a55 -S mtk-afe samples/audio/twostream_dl11_dl8
 adb push build/zephyr/zephyr.bin /root/zephyr.bin
 adb shell 'echo on > /sys/devices/platform/soc/10b10000.afe/power/control'
-adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin genio-700-evk-zephyr-afe.cell'
+adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin genio-510-evk-zephyr-afe.cell'
 ```
 
 See [the group README](../README.md) for why each of those steps is needed.

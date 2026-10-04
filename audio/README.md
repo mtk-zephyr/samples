@@ -33,8 +33,10 @@ stopped on its first access. You need the `-afe` cell:
 adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin genio-700-evk-zephyr-afe.cell'
 ```
 
-That cell is 700-authored and works unchanged on the 510: same die family, AFE
-at the same addresses, identical inmate window and console.
+Each board has its own: `genio-510-evk-zephyr-afe.cell` on the Genio 510 and
+`genio-700-evk-zephyr-afe.cell` on the Genio 700, both on CPU 3. Their
+`-afe-a78` and `-afe-smp` siblings run the same image on an A78 core, or an
+image built for the `smp` board variant on two A55 cores.
 
 **3. Ask Linux to hold the audio power domain up.**
 
@@ -50,11 +52,10 @@ returns 0. The symptom is a DMA pointer outside its buffer.
 Unbinding Linux's `mt8188-audio` driver does *not* work instead: the domain
 tracks an active stream, not a loaded driver.
 
-**4. Have Linux mux the eTDM pins.** The pin controller is granted by no cell,
-so pin muxing goes through the hypervisor's mediator, which discards an
-ungranted write and reports success. The snippet's `pinctrl-0` therefore
-applies nothing under the cell, and the pins must be muxed by the board's Linux
-devicetree instead. Check before blaming the driver:
+**4. Check the eTDM pin mux.** The AFE cells grant the eTDM pins, so the
+snippet's `pinctrl-0` muxes them when the driver starts, whatever Linux did.
+A hypervisor whose AFE cells do not grant them discards the writes and reports
+success, and the pins keep Linux's mux. Check before blaming the driver:
 
 ```bash
 adb shell 'cat /sys/kernel/debug/pinctrl/10005000.pinctrl-pinctrl_paris/pins' \
