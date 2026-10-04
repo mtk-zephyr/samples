@@ -3,9 +3,9 @@
 ## How Zephyr runs on a Genio EVK
 
 Zephyr is not the only thing on the board. Linux boots first and runs the
-**Jailhouse** hypervisor; Zephyr runs as an *inmate* on one Cortex-A55 core,
-with a slice of memory and a short list of devices handed to it. Everything else
-— storage, networking, the other five cores — stays with Linux.
+**Jailhouse** hypervisor; Zephyr runs as an *inmate* on one core, with a slice
+of memory and a short list of devices handed to it. Everything else — storage,
+networking, the other cores — stays with Linux.
 
 This has consequences worth knowing before you debug anything:
 
@@ -25,6 +25,26 @@ hostname. Run it on the board:
 ```bash
 adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin'
 ```
+
+Its second argument picks a different inmate cell. The cell decides which core
+Zephyr gets:
+
+| Cell | Core |
+|---|---|
+| `genio-510-evk-zephyr.cell` (default) | CPU 3, Cortex-A55 |
+| `genio-510-evk-zephyr-a78.cell` | CPU 5, Cortex-A78 |
+| `genio-700-evk-zephyr.cell` (default) | CPU 3, Cortex-A55 |
+| `genio-700-evk-zephyr-a78.cell` | CPU 7, Cortex-A78 |
+
+```bash
+adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin genio-510-evk-zephyr-a78.cell'
+```
+
+The same image runs on either core; the A78 cells differ from the default
+ones only in the CPU they grant. The two A78 cores share a clock that Linux's
+cpufreq and thermal throttling control, so Zephyr's speed there follows Linux's
+decisions. The audio samples need the `-zephyr-afe` cell instead (see
+[`audio/README.md`](../audio/README.md)).
 
 To check what state things are in:
 

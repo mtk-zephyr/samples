@@ -8,7 +8,9 @@
 #   adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin'
 #
 # The board is detected from its hostname, so the same script serves the
-# Genio 700 EVK and the Genio 510 EVK.
+# Genio 700 EVK and the Genio 510 EVK.  The optional second argument names a
+# different inmate cell, for example genio-510-evk-zephyr-a78.cell to run on a
+# Cortex-A78 core instead of the default Cortex-A55.
 #
 # Two things here cost a debugging cycle each, and are why this is a script
 # rather than a line in a README:

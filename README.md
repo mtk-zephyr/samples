@@ -37,9 +37,10 @@ west build -b mt8390_genio_700_evk/mt8188/a55 samples/gpio/loopback
 
 Boards: `mt8390_genio_700_evk/mt8188/a55` and `mt8370_genio_510_evk/mt8188/a55`.
 
-Zephyr runs on **one Cortex-A55 core as a Jailhouse inmate**, alongside Linux —
-so "flashing" means copying the image to the board and starting a cell, not
-writing to storage:
+Zephyr runs on **one core as a Jailhouse inmate**, alongside Linux — a
+Cortex-A55 by default, or a Cortex-A78 under the `-zephyr-a78` cell (see
+[`doc/hardware.md`](doc/hardware.md)). So "flashing" means copying the image to
+the board and starting a cell, not writing to storage:
 
 ```bash
 adb push build/zephyr/zephyr.bin    /root/zephyr.bin
