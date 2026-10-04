@@ -1,0 +1,8 @@
+/*
+ * Copyright (c) 2026 MediaTek Inc.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* The SMP cell grants the same two pins as the single-core one. */
+#include "mt8390_genio_700_evk_mt8188_a55.overlay"

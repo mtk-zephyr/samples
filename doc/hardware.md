@@ -35,6 +35,8 @@ Zephyr gets:
 | `genio-510-evk-zephyr-a78.cell` | CPU 5, Cortex-A78 |
 | `genio-700-evk-zephyr.cell` (default) | CPU 3, Cortex-A55 |
 | `genio-700-evk-zephyr-a78.cell` | CPU 7, Cortex-A78 |
+| `genio-510-evk-zephyr-smp.cell` | CPU 2 and 3, Cortex-A55 |
+| `genio-700-evk-zephyr-smp.cell` | CPU 2 and 3, Cortex-A55 |
 
 ```bash
 adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin genio-510-evk-zephyr-a78.cell'
@@ -45,6 +47,14 @@ ones only in the CPU they grant. The two A78 cores share a clock that Linux's
 cpufreq and thermal throttling control, so Zephyr's speed there follows Linux's
 decisions. The audio samples need the `-zephyr-afe` cell instead (see
 [`audio/README.md`](../audio/README.md)).
+
+The SMP cells are for images built for the two-core variant, for example
+`mt8370_genio_510_evk/mt8188/a55/smp`: the cell starts CPU 2, and Zephyr starts
+CPU 3 itself. A single-core image runs in them too, on CPU 2 only. The SMP
+cells come from the `port/genio-evk` branch of
+[mtk-jailhouse](https://github.com/mtk-jailhouse/jailhouse), and the hypervisor
+must include its commit "arm-common: gic-v3: Emulate the pending state of
+SGIs": without it an SMP image can deadlock at start-up.
 
 To check what state things are in:
 

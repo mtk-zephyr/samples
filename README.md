@@ -35,7 +35,8 @@ for anything you have to support.
 west build -b mt8390_genio_700_evk/mt8188/a55 samples/gpio/loopback
 ```
 
-Boards: `mt8390_genio_700_evk/mt8188/a55` and `mt8370_genio_510_evk/mt8188/a55`.
+Boards: `mt8390_genio_700_evk/mt8188/a55` and `mt8370_genio_510_evk/mt8188/a55`,
+plus their two-core `.../a55/smp` variants for the audio-free samples.
 
 Zephyr runs on **one core as a Jailhouse inmate**, alongside Linux — a
 Cortex-A55 by default, or a Cortex-A78 under the `-zephyr-a78` cell (see
