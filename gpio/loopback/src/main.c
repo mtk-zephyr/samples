@@ -34,17 +34,26 @@ static const struct device *const gpio = DEVICE_DT_GET(DT_NODELABEL(gpio32_63));
 
 static struct gpio_callback cb_data;
 static atomic_t events;
+/* Set while a level trigger is armed: the handler then stops the interrupt. */
+static atomic_t level_mode;
 
 static int passed;
 static int failed;
 
 static void edge_handler(const struct device *port, struct gpio_callback *cb, gpio_port_pins_t pins)
 {
-	ARG_UNUSED(port);
 	ARG_UNUSED(cb);
 	ARG_UNUSED(pins);
 
 	atomic_inc(&events);
+
+	/*
+	 * A level keeps firing for as long as it holds.  The GPIO API leaves it
+	 * to the consumer to stop it, so this handler does, on the first event.
+	 */
+	if (atomic_get(&level_mode) != 0) {
+		(void)gpio_pin_interrupt_configure(port, SENSE_PIN, GPIO_INT_DISABLE);
+	}
 }
 
 static void check(const char *tag, bool ok, const char *fmt, ...)
@@ -124,10 +133,6 @@ int main(void)
 	check("B3-toggle", seen[0] == 1 && seen[1] == 0 && seen[2] == 1 && seen[3] == 0,
 	      "toggled 4x, sensed %d%d%d%d, want 1010", seen[0], seen[1], seen[2], seen[3]);
 
-	/* --- B7: level-triggered interrupts are deliberately refused ----- */
-	ret = gpio_pin_interrupt_configure(gpio, SENSE_PIN, GPIO_INT_LEVEL_HIGH);
-	check("B7-level-refused", ret == -ENOTSUP, "LEVEL_HIGH = %d, want -ENOTSUP", ret);
-
 	/* --- interrupt plumbing ----------------------------------------- */
 	gpio_init_callback(&cb_data, edge_handler, BIT(SENSE_PIN));
 	ret = gpio_add_callback(gpio, &cb_data);
@@ -174,6 +179,48 @@ int main(void)
 	}
 	check("B4-both-rising", rises == 4, "4 rising edges produced %d event(s)", rises);
 	check("B4-both-falling", falls == 4, "4 falling edges produced %d event(s)", falls);
+
+	/* --- B7: level triggers ------------------------------------------ */
+	/*
+	 * A level fires while it holds, not when it changes: quiet while the
+	 * pin is inactive, an event once it goes active, and an event straight
+	 * away if it is already active when the trigger is armed.  The handler
+	 * disables the interrupt on its first event, so each expects exactly 1.
+	 */
+	atomic_set(&level_mode, 1);
+
+	gpio_pin_set(gpio, DRIVE_PIN, 0);
+	k_sleep(SETTLE);
+	atomic_clear(&events);
+	ret = gpio_pin_interrupt_configure(gpio, SENSE_PIN, GPIO_INT_LEVEL_HIGH);
+	check("B7-level-high-configure", ret == 0, "LEVEL_HIGH = %d", ret);
+
+	k_sleep(SETTLE);
+	val = (int)atomic_get(&events);
+	check("B7-level-high-quiet", val == 0, "pin low, %d event(s), want 0", val);
+
+	val = pulse(1);
+	check("B7-level-high-fires", val == 1, "pin high, %d event(s), want 1", val);
+
+	atomic_clear(&events);
+	ret = gpio_pin_interrupt_configure(gpio, SENSE_PIN, GPIO_INT_LEVEL_HIGH);
+	k_sleep(SETTLE);
+	val = (int)atomic_get(&events);
+	check("B7-level-high-held", ret == 0 && val == 1,
+	      "armed while high: ret %d, %d event(s), want 1", ret, val);
+
+	atomic_clear(&events);
+	ret = gpio_pin_interrupt_configure(gpio, SENSE_PIN, GPIO_INT_LEVEL_LOW);
+	check("B7-level-low-configure", ret == 0, "LEVEL_LOW = %d", ret);
+
+	k_sleep(SETTLE);
+	val = (int)atomic_get(&events);
+	check("B7-level-low-quiet", val == 0, "pin high, %d event(s), want 0", val);
+
+	val = pulse(0);
+	check("B7-level-low-fires", val == 1, "pin low, %d event(s), want 1", val);
+
+	atomic_set(&level_mode, 0);
 
 	/* --- disable must actually stop delivery -------------------------- */
 	ret = gpio_pin_interrupt_configure(gpio, SENSE_PIN, GPIO_INT_DISABLE);

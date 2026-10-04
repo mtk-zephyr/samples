@@ -2,7 +2,8 @@
 
 Drives one pin, senses it on another through a wire, and checks the GPIO driver
 and the external interrupt controller together: output, input, toggle, pin
-reservation, and all four interrupt trigger modes.
+reservation, and every interrupt trigger mode — rising, falling, both edges,
+high level and low level.
 
 ## Wiring
 
@@ -34,14 +35,22 @@ PASS B6-reserved-pin configure(pin0) = -22, want -EINVAL
 PASS B2-drive-high drove 1, sensed 1
 ...
 PASS B4-both-rising 4 rising edges produced 4 event(s)
-GPIOTEST DONE passed=19 failed=0 -> PASS
+PASS B7-level-high-fires pin high, 1 event(s), want 1
+GPIOTEST DONE passed=25 failed=0 -> PASS
 ```
 
-Nineteen checks: reserved pins refused with `-EINVAL`, output drives and input
-reads it back, `gpio_pin_toggle` moves the pad, level-triggered interrupts
-refused with `-ENOTSUP`, rising-only and falling-only each firing on their own
-edge and ignoring the other, both-edges, and interrupt disable actually
-silencing delivery.
+Twenty-five checks: reserved pins refused with `-EINVAL`, output drives and
+input reads it back, `gpio_pin_toggle` moves the pad, rising-only and
+falling-only each firing on their own edge and ignoring the other, both-edges,
+the two level triggers, and interrupt disable actually silencing delivery.
+
+The level checks are the fiddly ones, because a level is not an event. Each
+asserts three things: **quiet** while the pin is inactive, **one** event once it
+goes active, and — for level-high — **one** event straight away when the trigger
+is armed with the pin already high, which is the case an edge-shaped mental
+model gets wrong. A level also keeps firing for as long as it holds, so the
+handler disables the interrupt on its first event; that is what the GPIO API
+asks of a consumer of level interrupts, not a workaround.
 
 ## Why software edges rather than a button
 
