@@ -8,12 +8,21 @@ reached the wire rather than just the driver's idea of it.
 ```bash
 west build -b mt8370_genio_510_evk/mt8188/a55 samples/uart/reconfigure
 adb push build/zephyr/zephyr.bin /root/zephyr.bin
+```
+
+Start the host script **first**, then bring the cell up:
+
+```bash
+python3 samples/uart/reconfigure/host/check_baud.py &
+sleep 2
 adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin'
-python3 samples/uart/reconfigure/host/check_baud.py
 ```
 
 The firmware announces each phase repeatedly, giving the host a window to
-resynchronise at the new rate.
+resynchronise at the new rate. The script follows phase 1 until the
+announcements stop, which is when the firmware switches to 9600, and times the
+rest from there. Phase 1 lasts three seconds, so a script started later than
+that has nothing to follow and says so.
 
 ## Expected
 
