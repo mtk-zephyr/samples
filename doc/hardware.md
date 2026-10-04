@@ -51,7 +51,7 @@ decisions. The audio samples need the `-zephyr-afe` cell instead (see
 The SMP cells are for images built for the two-core variant, for example
 `mt8370_genio_510_evk/mt8188/a55/smp`: the cell starts CPU 2, and Zephyr starts
 CPU 3 itself. A single-core image runs in them too, on CPU 2 only. The SMP
-cells come from the `port/genio-evk` branch of
+cells come from the `mtk-genio-dev` branch of
 [mtk-jailhouse](https://github.com/mtk-jailhouse/jailhouse), and the hypervisor
 must include its commit "arm-common: gic-v3: Emulate the pending state of
 SGIs": without it an SMP image can deadlock at start-up.
