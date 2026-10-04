@@ -5,3 +5,6 @@ build-*/
 # twister output
 twister-out/
 twister-out.*/
+
+# Python bytecode
+__pycache__/
