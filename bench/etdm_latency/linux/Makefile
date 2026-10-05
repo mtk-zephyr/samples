@@ -6,10 +6,11 @@
 
 CC ?= cc
 CFLAGS ?= -O2
-CFLAGS += -Wall -Wextra -I../common
+# override: a CFLAGS given on the make command line must not drop these.
+override CFLAGS += -Wall -Wextra -I../common
 ifneq ($(SYSROOT),)
-CFLAGS += --sysroot=$(SYSROOT)
-LDFLAGS += --sysroot=$(SYSROOT)
+override CFLAGS += --sysroot=$(SYSROOT)
+override LDFLAGS += --sysroot=$(SYSROOT)
 endif
 LDLIBS += -lasound
 
