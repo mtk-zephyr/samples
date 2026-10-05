@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: Apache-2.0
+
+mainmenu "eTDM loop-latency bench"
+
+config BENCH_RUN_MS
+	int "Measured time per run, ms"
+	default 3000
+
+config BENCH_WARMUP_MS
+	int "Settling time before each run is measured, ms"
+	default 500
+
+config BENCH_CACHED_BUFFERS
+	bool "Access the AFE buffers through a cacheable mapping"
+	default y
+	help
+	  Map the AFE buffer region a second time, cacheable, and keep it
+	  coherent with explicit cache maintenance.  Reads from the driver's
+	  non-cacheable mapping are slow enough to dominate the processing
+	  time.  Say n to measure that mapping instead.
+
+config BENCH_QUICK
+	bool "Smaller sweep: blocks 32 and 64, leads 32 to 128"
+
+source "Kconfig.zephyr"

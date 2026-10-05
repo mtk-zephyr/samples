@@ -76,8 +76,8 @@ connectors, jumpers and the audio wiring.
 Each has its own README with the exact expected output.
 
 **Audio has prerequisites the others do not** — a build snippet, a hypervisor
-cell that grants the AFE, and two things Linux has to do first. Every one of
-them fails silently, with the driver returning success throughout, so work
+cell that grants the AFE, and the audio power domain, which Linux has to hold
+up. Every one of them fails silently, with the driver returning success throughout, so work
 through [`audio/README.md`](audio/README.md) before concluding anything about
 the driver.
 
@@ -86,6 +86,15 @@ cannot be observed from the target. Timer accuracy measured with the timer under
 test always looks perfect; a UART echo has to be compared against what was sent;
 and a baud change is only real if the old rate stops working. Those scripts live
 in each sample's `host/` directory and need `pyserial`.
+
+## Benchmarks
+
+[`bench/etdm_latency`](bench/etdm_latency) measures how long audio takes to go
+once round the eTDM loopback, at 2, 16 and 32 channels, with passthrough, FIR
+or IIR processing in the loop. The same processing code and lap measurement
+run on Zephyr (one A55, one A78, or two A55 cores, each in its AFE cell) and on
+Linux native, so the targets can be compared directly. Its README covers both
+sides and the tools that run and summarise the sweeps.
 
 ## Checking they all still build
 

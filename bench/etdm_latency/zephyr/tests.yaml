@@ -1,0 +1,16 @@
+sample:
+  name: eTDM loop-latency bench
+common:
+  build_only: true
+  extra_args:
+    - SNIPPET=mtk-afe
+  platform_allow:
+    - mt8370_genio_510_evk/mt8188/a55
+    - mt8370_genio_510_evk/mt8188/a55/smp
+    - mt8390_genio_700_evk/mt8188/a55
+    - mt8390_genio_700_evk/mt8188/a55/smp
+tests:
+  bench.mediatek.etdm_latency:
+    tags:
+      - audio
+      - mediatek
