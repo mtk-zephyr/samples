@@ -7,6 +7,8 @@ common:
   platform_allow:
     - mt8390_genio_700_evk/mt8188/a55
     - mt8370_genio_510_evk/mt8188/a55
+    - mt8390_genio_700_evk/mt8188/a55/smp
+    - mt8370_genio_510_evk/mt8188/a55/smp
 tests:
   sample.mediatek.audio.record_ul3:
     tags:
