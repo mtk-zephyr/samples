@@ -66,6 +66,16 @@ cells come from the `mtk-genio-dev` branch of
 must include its commit "arm-common: gic-v3: Emulate the pending state of
 SGIs": without it an SMP image can deadlock at start-up.
 
+The reverse does not work: **an `smp` image needs an SMP cell**, and a cell with
+too few cores fails in one of two ways, neither of which says what is wrong.
+Measured on a Genio 700 with the `smp` image:
+
+- In `-zephyr-a78`, which has CPU 7 only: **nothing on the console**, and
+  `jailhouse cell list` says `running`.
+- In `-zephyr`, which has CPU 3 only: the boot banner, then
+  `Failed to boot secondary CPU core 1`, then a kernel panic. The cell still
+  says `running`.
+
 To check what state things are in:
 
 ```bash
@@ -161,7 +171,9 @@ adb shell 'jailhouse cell list'    # running, or failed?
 
 - `failed` — the image likely does not fit the granted window.
 - `running` with no output — the console never came up: pin control, the
-  infra-ao clock gate, or the UART driver.
+  infra-ao clock gate, or the UART driver. **Check the image against the cell
+  first**: an `smp` image in a single-core cell can be silent in exactly this
+  way (see above), and no driver is at fault.
 - Nothing holding the port, or two things holding it — fix that first and
   re-run. Two readers each get a fraction of the bytes, which is
   indistinguishable from a dead console.
