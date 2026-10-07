@@ -43,10 +43,20 @@ adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin genio-510-evk-zephyr-a78.ce
 ```
 
 The same image runs on either core; the A78 cells differ from the default
-ones only in the CPU they grant. The two A78 cores share a clock that Linux's
-cpufreq and thermal throttling control, so Zephyr's speed there follows Linux's
-decisions. The audio samples need the `-zephyr-afe` cell instead (see
-[`audio/README.md`](../audio/README.md)).
+ones only in the CPU they grant. The audio samples need the `-zephyr-afe` cell
+instead (see [`audio/README.md`](../audio/README.md)).
+
+Whichever core Zephyr gets, its clock stays with Linux. Linux's cpufreq, and
+its thermal throttling, set one frequency for the whole A55 cluster and one for
+the two A78 cores, from the load Linux sees, so Zephyr runs at whatever
+frequency Linux picks for its cluster. Under the default `schedutil` governor
+with Linux idle, that can be the lowest one: on a Genio 510, processing on
+CPU 3 took about 35% longer than under `performance`. For timing-sensitive
+samples, set the governor first:
+
+```bash
+adb shell 'for p in /sys/devices/system/cpu/cpufreq/policy*; do echo performance > $p/scaling_governor; done'
+```
 
 The SMP cells are for images built for the two-core variant, for example
 `mt8370_genio_510_evk/mt8188/a55/smp`: the cell starts CPU 2, and Zephyr starts
