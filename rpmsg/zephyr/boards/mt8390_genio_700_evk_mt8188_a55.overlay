@@ -4,6 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/*
+ * The rpmsg cells give the inmate a virtual PCI host bridge at 0x6b800000 with
+ * one ivshmem-v2 device behind it, interrupting on GIC SPI 74.  The shared
+ * memory is read from the device, so nothing here names its regions.
+ *
+ * The same overlay serves both Genio EVKs: the cells give them the same layout.
+ */
+
 / {
 	chosen {
 		zephyr,pcie-controller = &pcie0;
@@ -18,28 +26,29 @@
 		ranges = <0x03000000 0x00 0x6b900000 0x6b900000 0x00 0x1000>;
 
 		/*
-		 * v4.4.2's pci-host-ecam-generic binding includes
-		 * interrupt-nexus.yaml, which makes these mandatory. The ivshmem
-		 * node below also names its interrupt directly, so this map is
-		 * what satisfies the binding rather than what routes the IRQ.
+		 * The pci-host-ecam-generic binding includes interrupt-nexus.yaml,
+		 * which makes these mandatory.  The ivshmem node below also names
+		 * its interrupt directly, so this map is what satisfies the binding
+		 * rather than what routes the IRQ.
 		 */
 		#interrupt-cells = <0x01>;
 		interrupt-map-mask = <0x00 0x00 0x00 0x07>;
-		interrupt-map = <0x00 0x00 0x00 0x01 &gic 0x00 GIC_SPI 74 IRQ_TYPE_LEVEL IRQ_DEFAULT_PRIORITY>;
+		interrupt-map = <0x00 0x00 0x00 0x01
+				 &gic 0x00 GIC_SPI 74 IRQ_TYPE_LEVEL IRQ_DEFAULT_PRIORITY>;
 
 		status = "okay";
 
 		ivshmem0: ivshmem@0 {
 			compatible = "qemu,ivshmem";
 
-            ivshmem-v2;
+			ivshmem-v2;
 
-            interrupt-parent = <&gic>;
-            interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL IRQ_DEFAULT_PRIORITY>;
+			interrupt-parent = <&gic>;
+			interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL IRQ_DEFAULT_PRIORITY>;
 
-			vendor-id = <0x110a>;			/* Siemens */
-			device-id = <0x4106>;			/* IVSHMEM */
-			class-rev = <0xff000000>;       /* PCI_CLASS_OTHERS | IVSHMEM_PROTO_UNDEFINED */
+			vendor-id = <0x110a>;		/* Siemens */
+			device-id = <0x4106>;		/* IVSHMEM */
+			class-rev = <0xff000000>;	/* PCI_CLASS_OTHERS | IVSHMEM_PROTO_UNDEFINED */
 			class-rev-mask = <0xffffff00>;	/* PCI_CLASS_MASK | IVSHMEM_PROTO_MASK */
 
 			reg = <0x00 0x00 0x00 0x00 0x01>;
@@ -47,15 +56,4 @@
 			status = "okay";
 		};
 	};
-};
-
-&gpio0_31 {
-	status = "okay";
-};
-
-&uart1 {
-	pinctrl-0 = <&uart1_default>;
-	pinctrl-names = "default";
-	current-speed = <115200>;
-	status = "okay";
 };

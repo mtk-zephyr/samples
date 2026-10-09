@@ -13,7 +13,7 @@
 #include <zephyr/drivers/ipm.h>
 #include <zephyr/drivers/virtualization/ivshmem.h>
 #include <zephyr/kernel.h>
-#include <kernel_arch_interface.h>	/* arch_page_phys_get() */
+#include <zephyr/arch/arch_interface.h>	/* arch_page_phys_get() */
 
 #include <openamp/open_amp.h>
 #include <metal/device.h>

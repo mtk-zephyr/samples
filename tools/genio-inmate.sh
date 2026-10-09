@@ -12,6 +12,9 @@
 # different inmate cell, for example genio-510-evk-zephyr-a78.cell to run on a
 # Cortex-A78 core instead of the default Cortex-A55.
 #
+# It destroys any cell already called "zephyr" before creating the new one.  If that
+# was an rpmsg cell Linux is attached to, detach it first -- see rpmsg/README.md.
+#
 # Two things here cost a debugging cycle each, and are why this is a script
 # rather than a line in a README:
 #
