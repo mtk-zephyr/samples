@@ -10,7 +10,7 @@ and this repository is the west manifest for that pairing — so one command get
 you the tree, its modules and these samples, already matched.
 
 ```bash
-west init -m https://github.com/mtk-zephyr/samples genio-workspace
+west init -m https://github.com/mtk-zephyr/samples --mr mtk-genio-v1.0.0 genio-workspace
 cd genio-workspace
 west update
 ```
@@ -24,10 +24,11 @@ genio-workspace/
 └── samples/     this repository
 ```
 
-Which branch of the tree you get is set by `revision:` in `west.yml`:
-`mtk-genio-dev` (default; where features land first, rebased and force-pushed)
-or `mtk-v4.4.2` (stable, only ever appended to). Pin a tag rather than a branch
-for anything you have to support.
+Which tree you get is set by `revision:` in `west.yml`. This release pins the tag
+`mtk-genio-v1.0.0`, so `west update` gives the same tree every time. `main` of
+this repository follows `mtk-genio-dev` instead, where features land first; that
+branch is rebased and force-pushed, so build against it only to follow
+development.
 
 ## Building and running one
 
