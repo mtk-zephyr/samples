@@ -71,6 +71,7 @@ connectors, jumpers and the audio wiring.
 | [`uart/rx_interrupt`](uart/rx_interrupt) | Interrupt-driven RX under load, byte-for-byte, with ISR counts | host script |
 | [`uart/reconfigure`](uart/reconfigure) | `uart_configure()` changes the rate **on the wire** | host script |
 | [`gpio/loopback`](gpio/loopback) | GPIO output, input, toggle, and every EINT trigger mode: rising, falling, both edges, high and low level | a wire |
+| [`rpmsg/`](rpmsg) | RPMsg between Linux and Zephyr over an ivshmem device: Zephyr as the remote, echoing what Linux sends | the `-zephyr-rpmsg` cell, and a Linux-side tool |
 | [`audio/`](audio) | The Audio Front End: playback, capture, and full-duplex eTDM loopbacks that check every captured frame | wires, a cell, and Linux's help |
 
 Each has its own README with the exact expected output.
