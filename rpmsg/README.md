@@ -43,10 +43,11 @@ The Linux tool, with an aarch64 toolchain:
 
 ```bash
 make -C samples/rpmsg/linux                       # aarch64-linux-gnu-gcc, the default
-make -C samples/rpmsg/linux CROSS_COMPILE=...     # another prefix, e.g. a Yocto SDK's
+make -C samples/rpmsg/linux CROSS_COMPILE=...     # another toolchain prefix
 ```
 
-The result is `samples/rpmsg/linux/build/rpmsg-test`.
+In a shell that has sourced a Yocto SDK's environment script, the first line uses
+the SDK's `CC` and `CFLAGS`.  The result is `samples/rpmsg/linux/build/rpmsg-test`.
 
 ## Run
 
