@@ -92,9 +92,9 @@ bridge:
 
 | Connector | UART | Whose |
 |---|---|---|
+| CN3200 | UART0 | Linux console |
 | CN3201 | UART1 | **Zephyr's console** |
 | CN3202 | UART2 | spare |
-| CN3203 | UART0 | Linux console |
 
 All of them enumerate as `/dev/ttyUSB*`. If you have more than one attached,
 use `/dev/serial/by-id/` — the adapters have distinct serial numbers, and
