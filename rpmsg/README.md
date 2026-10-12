@@ -22,9 +22,13 @@ puts the OpenAMP resource table at the start of that section, followed by two
 vrings of 4 KiB. It announces the service `rpmsg-raw`.
 
 Linux's BSP kernel binds the same device with `mtk_jh_rproc`, as a **detached
-remoteproc** named `0001:00:00.0`. Attaching it brings up virtio rpmsg, and the
-service announcement creates `/dev/rpmsg0` through `rpmsg_char`. No kernel
-change is needed.
+remoteproc** named `0001:00:00.0`; the driver logs as `mtk-jh-rproc`. Attaching
+it brings up virtio rpmsg, and the service announcement creates `/dev/rpmsg0`
+through `rpmsg_char`. No kernel change is needed.
+
+The driver comes with the Jailhouse support of the IoT Yocto image: the
+`linux-mtk_6.6` bbappend of `meta-mediatek-experimental`, with `jailhouse` in
+`IMAGE_INSTALL`. An image built without it has no such remoteproc.
 
 The shared memory is read from the device, so the application follows whatever
 regions the cell grants. The board overlays name only the host bridge at
@@ -77,7 +81,10 @@ n=$(grep -l 0001:00:00.0 /sys/class/remoteproc/*/name | sed 's|.*/remoteproc\([0
 `rpmsg-test` writes `start` to the remoteproc, waits for `/dev/rpmsg0`, and then
 prints each message it receives. The Zephyr console, UART1 on **CN3201**, prints
 the messages Linux sends. The message numbers rise by one each time. Stop
-`rpmsg-test` with Ctrl-C.
+`rpmsg-test` with Ctrl-C in an interactive `adb shell`: a command given to
+`adb shell` directly does not receive the key, so start the tool from an
+interactive shell. Stopping it does not detach the remoteproc; the third rule
+below still applies.
 
 Each attach logs "Allocated carveout doesn't fit device address request" twice.
 The exchange works regardless.
