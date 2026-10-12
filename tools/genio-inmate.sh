@@ -12,8 +12,14 @@
 # different inmate cell, for example genio-510-evk-zephyr-a78.cell to run on a
 # Cortex-A78 core instead of the default Cortex-A55.
 #
-# It destroys any cell already called "zephyr" before creating the new one.  If that
-# was an rpmsg cell Linux is attached to, detach it first -- see rpmsg/README.md.
+# The cell's name is read from the cell file, so the script serves both
+# generations of cells: those of mtk-v1.0.0, which are all named "zephyr", and
+# the later ones, named after their file without the board prefix
+# ("genio-510-evk-zephyr-afe.cell" is "zephyr-afe").
+#
+# It destroys any Zephyr cell already there, "zephyr" or "zephyr-*", before
+# creating the new one, as they share a core.  If one is an rpmsg cell Linux is
+# attached to, detach it first -- see rpmsg/README.md.
 #
 # Two things here cost a debugging cycle each, and are why this is a script
 # rather than a line in a README:
@@ -40,18 +46,38 @@ esac
 
 INMATE=${2:-$DEFAULT_INMATE}
 
+# An inmate cell file begins with the signature "JHCLL", an architecture byte
+# and a 2-byte revision, then the name, 32 bytes padded with NULs.
+if [ ! -f "$CELLS/$INMATE" ]; then
+	echo "no cell file $CELLS/$INMATE" >&2
+	exit 1
+fi
+if [ "$(head -c 5 "$CELLS/$INMATE")" != JHCLL ]; then
+	echo "$CELLS/$INMATE is not an inmate cell file" >&2
+	exit 1
+fi
+NAME=$(dd if="$CELLS/$INMATE" bs=1 skip=8 count=32 2>/dev/null | tr -d '\0')
+
 modprobe jailhouse 2>/dev/null || true
 
 if ! jailhouse cell list 2>/dev/null | grep -qE "^[0-9]"; then
 	jailhouse enable "$CELLS/$ROOT_CELL"
 fi
 
-jailhouse cell shutdown zephyr 2>/dev/null || true
-jailhouse cell destroy  zephyr 2>/dev/null || true
+for f in /sys/devices/jailhouse/cells/*/name; do
+	[ -e "$f" ] || continue
+	cell=$(cat "$f")
+	case "$cell" in
+	zephyr | zephyr-*)
+		jailhouse cell shutdown "$cell" 2>/dev/null || true
+		jailhouse cell destroy  "$cell" 2>/dev/null || true
+		;;
+	esac
+done
 
 jailhouse cell create "$CELLS/$INMATE"
 # 0x8000 is where the inmate cell maps the window the image is linked for.
-jailhouse cell load   zephyr "$IMAGE" -a 0x00008000
-jailhouse cell start  zephyr
+jailhouse cell load   "$NAME" "$IMAGE" -a 0x00008000
+jailhouse cell start  "$NAME"
 
 jailhouse cell list

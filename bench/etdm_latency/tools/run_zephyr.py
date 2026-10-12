@@ -21,6 +21,7 @@ import serial
 HERE = os.path.dirname(os.path.abspath(__file__))
 INMATE = os.path.normpath(os.path.join(HERE, '..', '..', '..', 'tools', 'genio-inmate.sh'))
 BOARD_DIR = '/root/etdm-bench'
+CELLS = '/usr/share/jailhouse/cells'
 AFE_POWER = '/sys/devices/platform/soc/10b10000.afe/power/control'
 
 
@@ -28,16 +29,28 @@ def adb(*args):
     return subprocess.run(['adb', *args], check=True, capture_output=True, text=True).stdout
 
 
+def cell_name(cell):
+    """The name inside an inmate cell file: 32 bytes padded with NULs, at offset 8."""
+    # Empty if there is no such file; adb does not always pass dd's status on.
+    out = subprocess.run(['adb', 'shell', f'dd if={CELLS}/{cell} bs=1 skip=8 count=32 2>/dev/null'],
+                         capture_output=True, text=True).stdout
+    return out.replace('\0', '').strip()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('image')
-    ap.add_argument('cell', help='cell file name in /usr/share/jailhouse/cells')
+    ap.add_argument('cell', help=f'cell file name in {CELLS}')
     ap.add_argument('log')
     ap.add_argument('--port', default=os.environ.get('PORT', '/dev/ttyUSB0'))
     ap.add_argument('--timeout', type=float, default=1800, help='seconds (default 1800)')
     args = ap.parse_args()
 
+    name = cell_name(args.cell)
+    if not name:
+        print(f'cannot read a cell name from {CELLS}/{args.cell}', file=sys.stderr)
+        return 1
     adb('shell', f'mkdir -p {BOARD_DIR}')
     adb('push', args.image, f'{BOARD_DIR}/bench.bin')
     adb('push', INMATE, f'{BOARD_DIR}/genio-inmate.sh')
@@ -69,7 +82,8 @@ def main():
                 if line.startswith('BENCH done'):
                     done = True
     ser.close()
-    subprocess.run(['adb', 'shell', 'jailhouse cell shutdown zephyr; jailhouse cell destroy zephyr'],
+    subprocess.run(['adb', 'shell',
+                    f'jailhouse cell shutdown {name}; jailhouse cell destroy {name}'],
                    capture_output=True)
     print('done' if done else 'TIMEOUT: no "BENCH done"', '->', args.log)
     return 0 if done else 1

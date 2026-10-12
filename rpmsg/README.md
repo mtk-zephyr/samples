@@ -53,9 +53,10 @@ the SDK's `CC` and `CFLAGS`.  The result is `samples/rpmsg/linux/build/rpmsg-tes
 
 Use the **rpmsg cell** of your board, `genio-<board>-evk-zephyr-rpmsg.cell`, not
 the plain `-zephyr` one: only it provides the ivshmem device. The root cell is
-the board's ordinary `genio-<board>-evk.cell`, the cell is named `zephyr`, and the
-image is loaded at the cell's entry, `0x8000`. [`tools/genio-inmate.sh`](../tools/genio-inmate.sh)
-does all of that:
+the board's ordinary `genio-<board>-evk.cell`, the cell is named `zephyr-rpmsg`
+(`zephyr` in mtk-jailhouse `mtk-v1.0.0`), and the image is loaded at the cell's
+entry, `0x8000`. [`tools/genio-inmate.sh`](../tools/genio-inmate.sh) does all of
+that:
 
 ```bash
 adb push build/zephyr/zephyr.bin                  /root/zephyr.bin
@@ -97,7 +98,7 @@ recovery sequence.
    ```sh
    echo detach > /sys/class/remoteproc/remoteproc$n/state
    cat /sys/class/remoteproc/remoteproc$n/state      # until this says "detached"
-   jailhouse cell destroy zephyr
+   jailhouse cell destroy zephyr-rpmsg
    ```
 
    One `detach` is needed per `start` you issued, and a detach that is not the
@@ -114,8 +115,9 @@ received with no recipient`.
 To recover: detach until the state reads `detached`, destroy the cell, and start
 again from the top.
 
-**This includes re-running `genio-inmate.sh`.** The script destroys any existing
-cell called `zephyr` before creating the new one, so run the detach first.
+**This includes re-running `genio-inmate.sh`.** The script destroys any Zephyr
+cell already there, the rpmsg cell included, before creating the new one, so run
+the detach first.
 
 ## What is not here
 
