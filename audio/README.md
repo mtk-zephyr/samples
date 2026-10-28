@@ -104,6 +104,5 @@ silence — which is a correct result, not a failure.
 
 ## Which tree
 
-Nothing to do: the AFE driver is on `mtk-genio-dev`, which the workspace
-`west.yml` already tracks, and on `mtk-v4.4.2` as well if you are building from
-the stable branch.
+Nothing to do: the AFE driver is in the tree the workspace `west.yml` pins,
+`v26.1-rc1`, and on both branches, `mtk-v4.4.2` and `mtk-genio-dev`.

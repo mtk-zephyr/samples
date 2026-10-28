@@ -24,10 +24,10 @@ genio-workspace/
 └── samples/     this repository
 ```
 
-Which branch of the tree you get is set by `revision:` in `west.yml`:
-`mtk-genio-dev` (default; where features land first, rebased and force-pushed)
-or `mtk-v4.4.2` (stable, only ever appended to). Pin a tag rather than a branch
-for anything you have to support.
+Which tree you get is set by `revision:` in `west.yml`: the tag `v26.1-rc1`, a
+pre-release on Zephyr 4.4.2 that pairs with mtk-jailhouse `v26.1-rc1`. To follow
+a branch instead, set `mtk-v4.4.2` (stable, only ever appended to; the tag is on
+it) or `mtk-genio-dev` (where features land first).
 
 ## Building and running one
 
@@ -105,14 +105,6 @@ west twister --build-only -T samples -p mt8390_genio_700_evk/mt8188/a55
 ```
 
 Useful after moving the tree to a new revision.
-
-On a workspace tracking **`mtk-v4.4.2`** this reports `No testsuites found at the
-specified location`, which looks like a wrong path and is not: these samples are
-described by `tests.yaml`, a name twister only learned in April 2026, and that
-branch's twister still looks for `sample.yaml`. Build each sample with
-`west build` there instead. The file name stays as it is — upstream has
-converted all of its own definitions to `tests.yaml` and calls the older names
-deprecated.
 
 ## What is not here
 

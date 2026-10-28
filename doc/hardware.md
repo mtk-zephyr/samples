@@ -60,11 +60,11 @@ adb shell 'for p in /sys/devices/system/cpu/cpufreq/policy*; do echo performance
 
 The SMP cells are for images built for the two-core variant, for example
 `mt8370_genio_510_evk/mt8188/a55/smp`: the cell starts CPU 2, and Zephyr starts
-CPU 3 itself. A single-core image runs in them too, on CPU 2 only. The SMP
-cells come from the `mtk-genio-dev` branch of
-[mtk-jailhouse](https://github.com/mtk-jailhouse/jailhouse), and the hypervisor
-must include its commit "arm-common: gic-v3: Emulate the pending state of
-SGIs": without it an SMP image can deadlock at start-up.
+CPU 3 itself. A single-core image runs in them too, on CPU 2 only. These two
+SMP cells, with two Cortex-A55 cores each, come with
+[mtk-jailhouse](https://github.com/mtk-jailhouse/jailhouse) `v26.1-rc1`, whose
+hypervisor includes the commit "arm-common: gic-v3: Emulate the pending state
+of SGIs": without it an SMP image can deadlock at start-up.
 
 The reverse does not work: **an `smp` image needs an SMP cell**, and a cell with
 too few cores fails in one of two ways, neither of which says what is wrong.
