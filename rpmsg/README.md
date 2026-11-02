@@ -57,10 +57,9 @@ the SDK's `CC` and `CFLAGS`.  The result is `samples/rpmsg/linux/build/rpmsg-tes
 
 Use the **rpmsg cell** of your board, `genio-<board>-evk-zephyr-rpmsg.cell`, not
 the plain `-zephyr` one: only it provides the ivshmem device. The root cell is
-the board's ordinary `genio-<board>-evk.cell`, the cell is named `zephyr-rpmsg`
-(`zephyr` in mtk-jailhouse `mtk-v1.0.0`), and the image is loaded at the cell's
-entry, `0x8000`. [`tools/genio-inmate.sh`](../tools/genio-inmate.sh) does all of
-that:
+the board's ordinary `genio-<board>-evk.cell`, the cell is named `zephyr-rpmsg`,
+and the image is loaded at the cell's entry, `0x8000`.
+[`tools/genio-inmate.sh`](../tools/genio-inmate.sh) does all of that:
 
 ```bash
 adb push build/zephyr/zephyr.bin                  /root/zephyr.bin

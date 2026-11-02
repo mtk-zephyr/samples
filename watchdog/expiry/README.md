@@ -7,13 +7,11 @@ cell that provides the watchdog, the hypervisor stops the cell.
 
 ## Where it may run
 
-**Only in a cell that provides the watchdog.** No cell of mtk-jailhouse
-`mtk-v1.0.0` does:
-
-- the plain cells do not grant the watchdog's block, and the inmate is stopped
-  on its first access;
-- the AFE cells grant the real watchdog, which Linux uses as its own, so this
-  application would reset the whole board.
+**Only in a cell that provides the watchdog.** In mtk-jailhouse `v26.1` every
+Zephyr cell does: each has a watchdog of its own at the address of the SoC's
+watchdog (TOPRGU), and an expiry fails only that cell. A cell without one
+either stops the inmate on its first access or, if it grants the real watchdog,
+which Linux uses as its own, lets this application reset the whole board.
 
 ## Run it
 
@@ -22,7 +20,7 @@ The watchdog is off in the boards; the `mtk-wdt` snippet turns it on.
 ```bash
 west build -b mt8370_genio_510_evk/mt8188/a55 -S mtk-wdt samples/watchdog/expiry
 adb push build/zephyr/zephyr.bin /root/zephyr.bin
-adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin <a cell that provides the watchdog>'
+adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin'
 ```
 
 ## Expected
@@ -44,8 +42,9 @@ about 15000 ms after the arm, so the last `alive` line is the one at 14750 ms,
 or the one at 15000 ms when it wins the race with the deadline. Bare-metal, the
 board then reboots. In a cell, the hypervisor stops the cell and `jailhouse cell
 list` shows it failed; it checks deadlines every 100 ms, so the cell may run up
-to that much longer. Whatever restarts failed cells starts it again from the
-top.
+to that much longer. If the cell is in the configuration of the
+`jailhouse-cell-restartd` daemon, the daemon starts it again from the top; an
+application that then calls `hwinfo_get_reset_cause()` gets `RESET_WATCHDOG`.
 
 `cycle` is the counter Zephyr's clock runs on, so the arm and the last kick can
 be compared with the time at which the hypervisor reports the expiry. A `FAIL`

@@ -102,7 +102,7 @@ from one that merely runs.
 no way to drive their input from the board itself, so on a bare EVK they record
 silence — which is a correct result, not a failure.
 
-## Which tree
+## Which revision of MediaTek Zephyr
 
-Nothing to do: the AFE driver is in the tree the workspace `west.yml` pins,
+Nothing to do: the AFE driver is in the revision the workspace `west.yml` pins,
 `mtk-v4.5.0-next`, and on `mtk-v4.5.0` and `mtk-v4.4.2` as well.

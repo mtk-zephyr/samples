@@ -1,13 +1,14 @@
-# MediaTek Genio Zephyr samples
+# MediaTek Zephyr Samples
 
 Runnable applications that exercise the Zephyr drivers on the MediaTek Genio
 EVKs, each one checking itself and printing a verdict. Use them to confirm a
 board is wired and configured correctly, to check a driver change did not break
 anything, or as worked examples of the interfaces.
 
-They build against the [Genio Zephyr tree](https://github.com/mtk-zephyr/mtk-zephyr),
-and this repository is the west manifest for that pairing — so one command gets
-you the tree, its modules and these samples, already matched.
+They build against [MediaTek Zephyr](https://github.com/mtk-zephyr/mtk-zephyr),
+the Zephyr tree for the Genio EVKs, and this repository is the west manifest for
+that pairing — so one command gets you the tree, its modules and these samples,
+already matched.
 
 ```bash
 west init -m https://github.com/mtk-zephyr/samples genio-workspace
@@ -19,17 +20,17 @@ That gives you:
 
 ```
 genio-workspace/
-├── zephyr/      the Genio Zephyr tree
+├── zephyr/      MediaTek Zephyr
 ├── modules/     HALs and modules it needs
 └── samples/     this repository
 ```
 
-Which tree you get is set by `revision:` in `west.yml`: the branch
-`mtk-v4.5.0-next`, the development line on Zephyr 4.5.0 and the default, where
-features land first. `mtk-v4.5.0` is the customer line on Zephyr 4.5.0, the line
-for the release tags from `v26.1` on, and `mtk-v4.4.2` the maintenance line on
-Zephyr 4.4.2. All of them are only ever appended to; pin a tag rather than a
-branch for anything you have to support.
+Which revision of MediaTek Zephyr you get is set by `revision:` in `west.yml`:
+the branch `mtk-v4.5.0-next`, the development line on Zephyr 4.5.0 and the
+default, where features land first. `mtk-v4.5.0` is the customer line on Zephyr
+4.5.0, the line for the release tags from `v26.1` on, and `mtk-v4.4.2` the
+maintenance line on Zephyr 4.4.2. All of them are only ever appended to; pin a
+tag rather than a branch for anything you have to support.
 
 ## Building and running one
 

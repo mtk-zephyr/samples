@@ -12,9 +12,8 @@
 # different inmate cell, for example genio-510-evk-zephyr-a78.cell to run on a
 # Cortex-A78 core instead of the default Cortex-A55.
 #
-# The cell's name is read from the cell file, so the script serves both
-# generations of cells: those of mtk-v1.0.0, which are all named "zephyr", and
-# the later ones, named after their file without the board prefix
+# The cell's name is read from the cell file rather than assumed.  In
+# mtk-jailhouse v26.1 it is the file's name without the board prefix
 # ("genio-510-evk-zephyr-afe.cell" is "zephyr-afe").
 #
 # It destroys any Zephyr cell already there, "zephyr" or "zephyr-*", before

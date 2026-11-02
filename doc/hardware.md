@@ -26,25 +26,33 @@ hostname. Run it on the board:
 adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin'
 ```
 
-Its second argument picks a different inmate cell. The cell decides which core
-Zephyr gets:
+Its second argument picks a different inmate cell. The cell decides which cores
+Zephyr gets and what it may use. mtk-jailhouse `v26.1` has nine Zephyr cells
+per board, `genio-<board>-evk-<name>.cell`, each named after its file without
+the board prefix. Every one grants UART1 (the console), GPIO 38 and 40 on the
+40-pin header with their EINTs, and a watchdog of its own; some grant more:
 
-| Cell | Core |
-|---|---|
-| `genio-510-evk-zephyr.cell` (default) | CPU 3, Cortex-A55 |
-| `genio-510-evk-zephyr-a78.cell` | CPU 5, Cortex-A78 |
-| `genio-700-evk-zephyr.cell` (default) | CPU 3, Cortex-A55 |
-| `genio-700-evk-zephyr-a78.cell` | CPU 7, Cortex-A78 |
-| `genio-510-evk-zephyr-smp.cell` | CPU 2 and 3, Cortex-A55 |
-| `genio-700-evk-zephyr-smp.cell` | CPU 2 and 3, Cortex-A55 |
+| Cell name | Genio 510 | Genio 700 | Also grants |
+|---|---|---|---|
+| `zephyr` (default) | CPU 3, Cortex-A55 | CPU 3, Cortex-A55 | |
+| `zephyr-a78` | CPU 5, Cortex-A78 | CPU 7, Cortex-A78 | |
+| `zephyr-smp` | CPU 2 and 3, Cortex-A55 | CPU 2 and 3, Cortex-A55 | |
+| `zephyr-a78-smp` | CPU 4 and 5, Cortex-A78 | CPU 6 and 7, Cortex-A78 | |
+| `zephyr-afe` | CPU 3, Cortex-A55 | CPU 3, Cortex-A55 | the AFE and the eTDM pins |
+| `zephyr-afe-a78` | CPU 5, Cortex-A78 | CPU 7, Cortex-A78 | the AFE and the eTDM pins |
+| `zephyr-afe-smp` | CPU 2 and 3, Cortex-A55 | CPU 2 and 3, Cortex-A55 | the AFE and the eTDM pins |
+| `zephyr-afe-a78-smp` | CPU 4 and 5, Cortex-A78 | CPU 6 and 7, Cortex-A78 | the AFE and the eTDM pins |
+| `zephyr-rpmsg` | CPU 3, Cortex-A55 | CPU 3, Cortex-A55 | an ivshmem device, the shared memory for `rpmsg` |
 
 ```bash
 adb shell 'sh /root/genio-inmate.sh /root/zephyr.bin genio-510-evk-zephyr-a78.cell'
 ```
 
-The same image runs on either core; the A78 cells differ from the default
-ones only in the CPU they grant. The audio samples need the `-zephyr-afe` cell
-instead (see [`audio/README.md`](../audio/README.md)).
+The same image runs on either core; the A78 cells differ from the A55 ones
+only in the CPUs they grant. An image for a `-a78-smp` cell is the `smp`
+variant with an overlay that enables the cpu nodes of the two A78s (MPIDR
+`0x600` and `0x700` on both boards) instead of CPU 2 and 3. The audio samples
+need one of the AFE cells instead (see [`audio/README.md`](../audio/README.md)).
 
 Whichever core Zephyr gets, its clock stays with Linux. Linux's cpufreq, and
 its thermal throttling, set one frequency for the whole A55 cluster and one for

@@ -1,16 +1,16 @@
-# West manifest for the MediaTek Genio Zephyr samples.
+# West manifest for MediaTek Zephyr Samples.
 #
 # This repository is the manifest repository of a T2 workspace
-# (zephyr/doc/develop/west/workspaces.rst): it names the Zephyr tree the
-# samples are built against, so one `west init -m` brings down the tree, its
-# modules and these samples together and they cannot drift apart.
+# (zephyr/doc/develop/west/workspaces.rst): it names the revision of MediaTek
+# Zephyr the samples are built against, so one `west init -m` brings down the
+# tree, its modules and these samples together and they cannot drift apart.
 #
 #   west init -m https://github.com/mtk-zephyr/samples genio-workspace
 #   cd genio-workspace && west update
 #
-# `revision` below selects which Genio tree you get.  It is the branch
-# mtk-v4.5.0-next, the development line on Zephyr 4.5.0 and the default,
-# where features land first.  The Genio branches are appended to and never
+# `revision` below selects which revision of MediaTek Zephyr you get.  It is
+# the branch mtk-v4.5.0-next, the development line on Zephyr 4.5.0 and the
+# default, where features land first.  Its branches are appended to and never
 # rewritten, but a branch moves; pin a tag for anything you have to support.
 # The other branches:
 #
@@ -25,7 +25,7 @@ manifest:
 
   projects:
     - name: mtk-zephyr
-      description: MediaTek Genio Zephyr tree
+      description: MediaTek Zephyr
       remote: mtk-zephyr
       revision: mtk-v4.5.0-next
       path: zephyr
