@@ -8,14 +8,15 @@
 #   west init -m https://github.com/mtk-zephyr/samples genio-workspace
 #   cd genio-workspace && west update
 #
-# `revision` below selects which Genio tree you get.  It is the tag
-# v26.1-rc1, a pre-release of the tree on Zephyr 4.4.2 that pairs with
-# mtk-jailhouse v26.1-rc1.  A tag never moves, so every workspace made from
-# this file gets the same tree.  To follow a branch instead:
+# `revision` below selects which Genio tree you get.  It is the branch
+# mtk-v4.5.0-next, the development line on Zephyr 4.5.0 and the default,
+# where features land first.  The Genio branches are appended to and never
+# rewritten, but a branch moves; pin a tag for anything you have to support.
+# The other branches:
 #
-#   mtk-v4.4.2      the stable branch the tag is on, appended to and never
-#                   rewritten.
-#   mtk-genio-dev   the development branch, where features land first.
+#   mtk-v4.5.0      the customer line on Zephyr 4.5.0, the line for the
+#                   release tags from v26.1 on.
+#   mtk-v4.4.2      the maintenance line on Zephyr 4.4.2.
 #
 manifest:
   remotes:
@@ -26,7 +27,7 @@ manifest:
     - name: mtk-zephyr
       description: MediaTek Genio Zephyr tree
       remote: mtk-zephyr
-      revision: v26.1-rc1
+      revision: mtk-v4.5.0-next
       path: zephyr
       # Brings in the HALs and modules the tree's own west.yml names.
       import: true

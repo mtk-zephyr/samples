@@ -24,10 +24,12 @@ genio-workspace/
 └── samples/     this repository
 ```
 
-Which tree you get is set by `revision:` in `west.yml`: the tag `v26.1-rc1`, a
-pre-release on Zephyr 4.4.2 that pairs with mtk-jailhouse `v26.1-rc1`. To follow
-a branch instead, set `mtk-v4.4.2` (stable, only ever appended to; the tag is on
-it) or `mtk-genio-dev` (where features land first).
+Which tree you get is set by `revision:` in `west.yml`: the branch
+`mtk-v4.5.0-next`, the development line on Zephyr 4.5.0 and the default, where
+features land first. `mtk-v4.5.0` is the customer line on Zephyr 4.5.0, the line
+for the release tags from `v26.1` on, and `mtk-v4.4.2` the maintenance line on
+Zephyr 4.4.2. All of them are only ever appended to; pin a tag rather than a
+branch for anything you have to support.
 
 ## Building and running one
 
