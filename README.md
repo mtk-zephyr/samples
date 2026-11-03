@@ -26,11 +26,12 @@ genio-workspace/
 ```
 
 Which revision of MediaTek Zephyr you get is set by `revision:` in `west.yml`:
-the branch `mtk-v4.5.0-next`, the development line on Zephyr 4.5.0 and the
-default, where features land first. `mtk-v4.5.0` is the customer line on Zephyr
+the tag `v26.1`, the release on Zephyr 4.5.0. To follow a line instead, name a
+branch: `mtk-v4.5.0-next` is the development line on Zephyr 4.5.0 and the
+default, where features land first, `mtk-v4.5.0` the customer line on Zephyr
 4.5.0, the line for the release tags from `v26.1` on, and `mtk-v4.4.2` the
-maintenance line on Zephyr 4.4.2. All of them are only ever appended to; pin a
-tag rather than a branch for anything you have to support.
+maintenance line on Zephyr 4.4.2. All of them are only ever appended to, but a
+branch moves; pin a tag rather than a branch for anything you have to support.
 
 ## Building and running one
 

@@ -9,14 +9,15 @@
 #   cd genio-workspace && west update
 #
 # `revision` below selects which revision of MediaTek Zephyr you get.  It is
-# the branch mtk-v4.5.0-next, the development line on Zephyr 4.5.0 and the
-# default, where features land first.  Its branches are appended to and never
+# the tag v26.1, the release on Zephyr 4.5.0; a tag never moves.  To follow
+# a line instead, name one of its branches.  They are appended to and never
 # rewritten, but a branch moves; pin a tag for anything you have to support.
-# The other branches:
 #
-#   mtk-v4.5.0      the customer line on Zephyr 4.5.0, the line for the
-#                   release tags from v26.1 on.
-#   mtk-v4.4.2      the maintenance line on Zephyr 4.4.2.
+#   mtk-v4.5.0-next  the development line on Zephyr 4.5.0 and the default,
+#                    where features land first.
+#   mtk-v4.5.0       the customer line on Zephyr 4.5.0, the line for the
+#                    release tags from v26.1 on.
+#   mtk-v4.4.2       the maintenance line on Zephyr 4.4.2.
 #
 manifest:
   remotes:
@@ -27,7 +28,7 @@ manifest:
     - name: mtk-zephyr
       description: MediaTek Zephyr
       remote: mtk-zephyr
-      revision: mtk-v4.5.0-next
+      revision: v26.1
       path: zephyr
       # Brings in the HALs and modules the tree's own west.yml names.
       import: true

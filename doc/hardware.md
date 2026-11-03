@@ -70,7 +70,7 @@ The SMP cells are for images built for the two-core variant, for example
 `mt8370_genio_510_evk/mt8188/a55/smp`: the cell starts CPU 2, and Zephyr starts
 CPU 3 itself. A single-core image runs in them too, on CPU 2 only. These two
 SMP cells, with two Cortex-A55 cores each, come with
-[mtk-jailhouse](https://github.com/mtk-jailhouse/jailhouse) `v26.1-rc1`, whose
+[MediaTek Jailhouse](https://github.com/mtk-jailhouse/jailhouse) `v26.1`, whose
 hypervisor includes the commit "arm-common: gic-v3: Emulate the pending state
 of SGIs": without it an SMP image can deadlock at start-up.
 

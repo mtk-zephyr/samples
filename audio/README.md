@@ -105,4 +105,5 @@ silence — which is a correct result, not a failure.
 ## Which revision of MediaTek Zephyr
 
 Nothing to do: the AFE driver is in the revision the workspace `west.yml` pins,
-`mtk-v4.5.0-next`, and on `mtk-v4.5.0` and `mtk-v4.4.2` as well.
+`v26.1`, and on the branches `mtk-v4.5.0-next`, `mtk-v4.5.0` and `mtk-v4.4.2` as
+well.
