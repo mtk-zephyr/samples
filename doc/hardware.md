@@ -38,10 +38,10 @@ the board prefix. Every one grants UART1 (the console), GPIO 38 and 40 on the
 | `zephyr-a78` | CPU 5, Cortex-A78 | CPU 7, Cortex-A78 | |
 | `zephyr-smp` | CPU 2 and 3, Cortex-A55 | CPU 2 and 3, Cortex-A55 | |
 | `zephyr-a78-smp` | CPU 4 and 5, Cortex-A78 | CPU 6 and 7, Cortex-A78 | |
-| `zephyr-afe` | CPU 3, Cortex-A55 | CPU 3, Cortex-A55 | the AFE and the eTDM pins |
-| `zephyr-afe-a78` | CPU 5, Cortex-A78 | CPU 7, Cortex-A78 | the AFE and the eTDM pins |
-| `zephyr-afe-smp` | CPU 2 and 3, Cortex-A55 | CPU 2 and 3, Cortex-A55 | the AFE and the eTDM pins |
-| `zephyr-afe-a78-smp` | CPU 4 and 5, Cortex-A78 | CPU 6 and 7, Cortex-A78 | the AFE and the eTDM pins |
+| `zephyr-afe` | CPU 3, Cortex-A55 | CPU 3, Cortex-A55 | the AFE with the clocks it programs and its DMA memory, all shared with Linux, the eTDM pins, the audio SiP call, and the audio reset through its watchdog |
+| `zephyr-afe-a78` | CPU 5, Cortex-A78 | CPU 7, Cortex-A78 | the AFE with the clocks it programs and its DMA memory, all shared with Linux, the eTDM pins, the audio SiP call, and the audio reset through its watchdog |
+| `zephyr-afe-smp` | CPU 2 and 3, Cortex-A55 | CPU 2 and 3, Cortex-A55 | the AFE with the clocks it programs and its DMA memory, all shared with Linux, the eTDM pins, the audio SiP call, and the audio reset through its watchdog |
+| `zephyr-afe-a78-smp` | CPU 4 and 5, Cortex-A78 | CPU 6 and 7, Cortex-A78 | the AFE with the clocks it programs and its DMA memory, all shared with Linux, the eTDM pins, the audio SiP call, and the audio reset through its watchdog |
 | `zephyr-rpmsg` | CPU 3, Cortex-A55 | CPU 3, Cortex-A55 | an ivshmem device, the shared memory for `rpmsg` |
 
 ```bash
