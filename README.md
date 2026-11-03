@@ -93,15 +93,6 @@ test always looks perfect; a UART echo has to be compared against what was sent;
 and a baud change is only real if the old rate stops working. Those scripts live
 in each sample's `host/` directory and need `pyserial`.
 
-## Benchmarks
-
-[`bench/etdm_latency`](bench/etdm_latency) measures how long audio takes to go
-once round the eTDM loopback, at 2, 16 and 32 channels, with passthrough, FIR
-or IIR processing in the loop. The same processing code and lap measurement
-run on Zephyr (one A55, one A78, or two A55 cores, each in its AFE cell) and on
-Linux native, so the targets can be compared directly. Its README covers both
-sides and the tools that run and summarise the sweeps.
-
 ## Checking they all still build
 
 ```bash
